@@ -1,4 +1,5 @@
-$(function() {
+$("#calcular").click(function() {
+    alert("oi");
     var a = -1,
         b = 0,
         c = 0,
@@ -11,7 +12,8 @@ $(function() {
         c = (a + b) / 2;
 
         // condição de parada
-        if ((Math.abs(cAux - c)) < 0.00001 || numLinhas > 100) {
+        if ((Math.abs(cAux - c)) < 0.00001 || numLinhas > 10) {
+
             break;
         } else {
             addLinhas(numLinhas++, a, b, c, funcao(a), funcao(b), funcao(c));
@@ -32,7 +34,12 @@ $(function() {
 
 // calculando função.
 function funcao(x) {
-    return x - 0.0001;
+    var result = String($("#cal-func").val());
+    var result = nerdamer(result);
+    console.log(result);
+    // alert("oi2");
+    alert("fim");
+    return 1;
 }
 
 
