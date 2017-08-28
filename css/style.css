@@ -1,0 +1,8 @@
+.table-bordered td,
+.table-bordered th {
+    border: 0 solid transparent;
+}
+
+.table thead th {
+    border: 0 solid transparent;
+}
