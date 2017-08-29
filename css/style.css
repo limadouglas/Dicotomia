@@ -6,3 +6,18 @@
 .table thead th {
     border: 0 solid transparent;
 }
+
+.alert {
+    text-align: center;
+    margin-bottom: 0;
+    margin-top: 0.8rem;
+}
+
+.bg-light {
+    background-color: #563d7c!important;
+}
+
+#titulo {
+    color: #fff;
+    font-weight: 700;
+}
