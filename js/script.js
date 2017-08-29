@@ -58,7 +58,7 @@ function dicotomia() {
                 if ((Math.abs(cAux - c)) < 0.00001 && numLinhas > 0) {
                     addLinhas(++numLinhas, a, b, c, fa, fb, fc, true);
                     a = c + 0.00001;
-                    b = a + 0.025;
+                    b = a + 0.001;
                     contRaiz++;
                     break;
                 } else {
@@ -73,8 +73,8 @@ function dicotomia() {
                 }
             }
         } else {
-            a += 0.025;
-            b += 0.025;
+            a += 0.001;
+            b += 0.001;
         }
     }
 
@@ -113,6 +113,8 @@ function addLinhas(nl, a, b, c, fa, fb, fc, sucesso) {
 // removendo todas as linhas da tabela.
 function limparTabela() {
     var linhas = $('#tabela-dicotomia tbody tr'); //tr
+    linhas.remove();
+    linhas = $('#tabela-raizes tbody tr'); //tr
     linhas.remove();
 }
 
