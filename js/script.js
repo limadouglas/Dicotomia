@@ -36,7 +36,7 @@ function dicotomia() {
     var f = nerdamer(String($('#fun').val())).buildFunction(); // f recebe a função especificada pelo usuário. agora basta chamar f passando um paramentro: f(x).
 
     var a = -100,
-        b = a + 1,
+        b = a + 0.001,
         c = 0,
         cAux = 0,
         numLinhas = 0,
