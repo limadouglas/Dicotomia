@@ -1,15 +1,33 @@
+var f;
+
 $(document).ready(function() {
     nerdamer.setConstant('e', 2.71828182846);
     nerdamer.setConstant('E', 2.71828182846);
+
+
 
 });
 
 
 
 // evento click botão
-$('#calcular').click(function() {
+$('#calcularDicotomia').click(function() {
     limparTabela();
+    f = nerdamer(String($('#fun').val())).buildFunction(); // f recebe a função especificada pelo usuário. agora basta chamar f passando um paramentro: f(x).
+
+    var linha = '<tr><th>#</th> <th> A </th> <th> B </th> <th> C </th> <th> F(A) </th> <th> F(B) </th> <th> F(C) </th></tr>';
+    $('#tabela-raiz thead').eq(0).append(linha);
     dicotomia();
+});
+
+$('#calcularRaphson').click(function() {
+    limparTabela();
+    f = nerdamer(String($('#fun').val())).buildFunction(); // f recebe a função especificada pelo usuário. agora basta chamar f passando um paramentro: f(x).
+
+    var linha = '<tr><th>#</th> <th> X </th> <th> f(X) </th> <th> f\'(X) </th> <th> calculo </th> <th> Precisão </th></tr>';
+    $('#tabela-raiz thead').eq(0).append(linha);
+
+    raphson();
 });
 
 
@@ -22,18 +40,14 @@ $('#fun').on('keypress', function(e) {
         $(this).attr("disabled", "disabled");
         $(this).removeAttr("disabled");
 
-        limparTabela();
-        dicotomia();
     }
 
 });
 
 
 
-// funcão gerencia dicotomia
+// funcão gerencia dicotomia |------------------------------------------------------------------------------------
 function dicotomia() {
-
-    var f = nerdamer(String($('#fun').val())).buildFunction(); // f recebe a função especificada pelo usuário. agora basta chamar f passando um paramentro: f(x).
 
     var a = -100,
         b = a + 0.001,
@@ -63,7 +77,6 @@ function dicotomia() {
                     break;
                 } else {
                     addLinhas(++numLinhas, a, b, c, fa, fb, fc, false);
-
                     if ((fb >= 0 && fc >= 0) || (fb < 0 && fc < 0)) {
                         b = c;
                     } else {
@@ -85,8 +98,69 @@ function dicotomia() {
 }
 
 
+// funcão gerencia newton raphson |------------------------------------------------------------------------------------
+function raphson() {
 
-// adicionando linha na tabela.
+    var x = 2,
+        fun = 0,
+        funDerivada = 0,
+        precisaoAnterior = 1,
+        precisao = null,
+        numLinhas = 0,
+        contRaiz = 0,
+        raizNaoEncontrada = true;
+
+
+    //  for (var i = x; i > -10; i--) {
+    //     fun = 0;
+    //     funDerivada = 0;
+    //     precisaoAnterior = 0;
+    //    precisao = 0;
+
+    while (numLinhas < 100) {
+
+        // funcao é calculada automaticamente com f(x).
+        fun = f(x);
+
+        // derivada 
+        funDerivada = (((f(x + 0.00001) - fun) / 0.00001));
+
+        // quando a precisão for menor que 0.0001 a raiz foi encontrada.
+        if (precisao < 0.001 && precisao != null) {
+            raizNaoEncontrada = false;
+            addLinhaRaphson(++numLinhas, x, fun, funDerivada, x - (fun / funDerivada), precisao, true);
+            contRaiz++;
+            x -= 0.005;
+        } else {
+            if (precisao == null)
+                precisao = 0;
+            addLinhaRaphson(++numLinhas, x, fun, funDerivada, x - (fun / funDerivada), precisao, false);
+        }
+
+        precisaoAnterior = x;
+
+        x = x - (fun / funDerivada);
+
+        precisao = x - precisaoAnterior;
+    }
+
+
+    raizNaoEncontrada = true;
+    i = x;
+
+    // }
+
+
+    $('#raiz').html('<div class="alert alert-success alert-dismissible fade show" role="alert" id="alerta"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span></button><strong id="qtdRaiz">10</strong> Raíz(es) encontrada(s)! </div>');
+    $('#qtdRaiz').html(contRaiz);
+
+    $('.modal').modal('show');
+
+}
+
+
+
+// adicionando linha na tabela de dicotomia
 function addLinhas(nl, a, b, c, fa, fb, fc, sucesso) {
     var novaLinha = (sucesso) ? $('<tr class="table-success">') : $('<tr>');
     var col = '';
@@ -100,26 +174,42 @@ function addLinhas(nl, a, b, c, fa, fb, fc, sucesso) {
 
     novaLinha.append(col);
 
-    $('#tabela-dicotomia tbody').append(novaLinha);
+    $('#tabela-raiz tbody').append(novaLinha);
     if (sucesso) {
         $('#tabela-raizes tbody').append('<tr> <td scope="row">' + nl + '</td> <td>' + c + '</td> </tr>');
     }
-    //alert("parou");
-    //alert('inseriu na tabela');
+
+}
+
+
+// adicionando linha na tabela de raphson.
+function addLinhaRaphson(nl, x, funcao, funDerivada, calc, precisao, sucesso) {
+    var novaLinha = (sucesso) ? $('<tr class="table-success">') : $('<tr>');
+    var col = '';
+    col += '<th scope="row">' + nl + '</th>';
+    col += '<td>' + x + '</td>';
+    col += '<td>' + funcao + '</td>';
+    col += '<td>' + funDerivada + '</td>';
+    col += '<td>' + calc + '</td>';
+    col += '<td>' + precisao + '</td>';
+
+    novaLinha.append(col);
+
+    $('#tabela-raiz tbody').append(novaLinha);
+    if (sucesso) {
+        $('#tabela-raizes tbody').append('<tr> <td scope="row">' + nl + '</td> <td>' + precisao + '</td> </tr>');
+    }
+
 }
 
 
 
 // removendo todas as linhas da tabela.
 function limparTabela() {
-    var linhas = $('#tabela-dicotomia tbody tr'); //tr
-    linhas.remove();
-    linhas = $('#tabela-raizes tbody tr'); //tr
-    linhas.remove();
+    $('#tabela-raiz thead tr').remove();
+    $('#tabela-raiz tbody tr').remove();
+    $('#tabela-raizes tbody tr').remove();
 }
-
-
-
 
 
 /*

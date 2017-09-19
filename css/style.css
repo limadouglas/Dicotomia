@@ -17,9 +17,9 @@
     background-color: #563d7c!important;
 }
 
-.table-bordered thead{
+.table-bordered thead {
     margin: 0;
-    border:0;
+    border: 0;
     background-color: #816aa5!important;
 }
 
@@ -28,7 +28,11 @@
     font-weight: 700;
 }
 
-.article{
+.article {
     border: 0;
     margin: 0;
+}
+
+.dropdown-menu {
+    left: -4.5rem;
 }

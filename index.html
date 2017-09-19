@@ -16,11 +16,25 @@
 <body>
     <div class="container-fluid">
         <nav class="navbar navbar-light bg-light justify-content-between">
-            <a class="navbar-brand" id="titulo">Dicotomia</a>
-            <div class="form-inline">
-                <input class="form-control mr-sm-2" type="text" placeholder="função..." aria-label="Search" id="fun">
-                <button class="btn btn-outline-warning my-2 my-sm-0" type="button" id="calcular">Calcular</button>
+            <a class="navbar-brand" id="titulo" href="#">Raiz da Função</a>
+
+            <div class="col-lg-5">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="função..." aria-label="Search for..." id="fun">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-outline-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Calcular
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" id="calcularDicotomia">Dicotomia</a>
+                            <div role="separator" class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" id="calcularRaphson">Newton-Raphson</a>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+
         </nav>
 
         <article>
@@ -60,8 +74,9 @@
 
             </div>
 
-            <table class="table table-bordered table-responsive" id="tabela-dicotomia">
+            <table class="table table-bordered table-responsive" id="tabela-raiz">
                 <thead class="table-dark">
+                    <!--
                     <tr>
                         <th>#</th>
                         <th>A</th>
@@ -70,6 +85,7 @@
                         <th>F(A)</th>
                         <th>F(B)</th>
                         <th>F(C)</th>
+                        -->
                     </tr>
                 </thead>
                 <tbody>
