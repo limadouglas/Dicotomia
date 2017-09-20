@@ -60,6 +60,7 @@ function dicotomia() {
         contRaiz = 0;
 
     while (a <= 100) {
+
         if ((f(a) >= 0 && f(b) < 0) || (f(a) < 0 && f(b) >= 0)) {
             while (true) {
 
@@ -89,6 +90,7 @@ function dicotomia() {
             a += 0.001;
             b += 0.001;
         }
+
     }
 
     $('#raiz').html('<div class="alert alert-success alert-dismissible fade show" role="alert" id="alerta"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span></button><strong id="qtdRaiz">10</strong> Raíz(es) encontrada(s)! </div>');
@@ -98,58 +100,99 @@ function dicotomia() {
 }
 
 
-// funcão gerencia newton raphson |------------------------------------------------------------------------------------
+// funcão gerencia newton raphson |--------------------------------------------------------------------------------------------------------
 function raphson() {
 
-    var x = 2,
+    var x = 100,
+        a = 100,
+        b = a + 0.001,
         fun = 0,
         funDerivada = 0,
-        precisaoAnterior = 1,
+        precisaoAnterior = 0,
         precisao = null,
         numLinhas = 0,
         contRaiz = 0,
         raizNaoEncontrada = true;
 
+    while (a >= -100) {
+        if ((f(a) >= 0 && f(b) < 0) || (f(a) < 0 && f(b) >= 0)) {
+            x = b;
+            precisaoAnterior = 1;
+            precisao = null;
+            while (true) {
+                // funcao é calculada automaticamente com f(x).
+                fun = f(x);
 
-    //  for (var i = x; i > -10; i--) {
-    //     fun = 0;
-    //     funDerivada = 0;
-    //     precisaoAnterior = 0;
-    //    precisao = 0;
+                // derivada 
+                funDerivada = (((f(x + 0.00001) - fun) / 0.00001));
 
-    while (numLinhas < 100) {
+                // quando a precisão for menor que 0.0001 a raiz foi encontrada.
+                if (precisao < 0.0001 && precisao != null) {
+                    addLinhaRaphson(++numLinhas, x, fun, funDerivada, x - (fun / funDerivada), precisao, true);
+                    contRaiz++;;
+                    b = x - 0.001;
+                    a = b - 0.001;
+                    break;
+                } else {
+                    if (precisao == null)
+                        precisao = 0;
+                    addLinhaRaphson(++numLinhas, x, fun, funDerivada, x - (fun / funDerivada), precisao, false);
+                }
 
-        // funcao é calculada automaticamente com f(x).
-        fun = f(x);
+                precisaoAnterior = x;
 
-        // derivada 
-        funDerivada = (((f(x + 0.00001) - fun) / 0.00001));
+                x = x - (fun / funDerivada);
 
-        // quando a precisão for menor que 0.0001 a raiz foi encontrada.
-        if (precisao < 0.001 && precisao != null) {
-            raizNaoEncontrada = false;
-            addLinhaRaphson(++numLinhas, x, fun, funDerivada, x - (fun / funDerivada), precisao, true);
-            contRaiz++;
-            x -= 0.005;
+                precisao = x - precisaoAnterior;
+            }
+
         } else {
-            if (precisao == null)
-                precisao = 0;
-            addLinhaRaphson(++numLinhas, x, fun, funDerivada, x - (fun / funDerivada), precisao, false);
+            a -= 0.001;
+            b -= 0.001;
         }
-
-        precisaoAnterior = x;
-
-        x = x - (fun / funDerivada);
-
-        precisao = x - precisaoAnterior;
     }
 
+    /*
 
-    raizNaoEncontrada = true;
-    i = x;
+        //  for (var i = x; i > -10; i--) {
+        //     fun = 0;
+        //     funDerivada = 0;
+        //     precisaoAnterior = 0;
+        //    precisao = 0;
 
-    // }
+        while (numLinhas < 100) {
 
+            // funcao é calculada automaticamente com f(x).
+            fun = f(x);
+
+            // derivada 
+            funDerivada = (((f(x + 0.00001) - fun) / 0.00001));
+
+            // quando a precisão for menor que 0.0001 a raiz foi encontrada.
+            if (precisao < 0.001 && precisao != null) {
+                raizNaoEncontrada = false;
+                addLinhaRaphson(++numLinhas, x, fun, funDerivada, x - (fun / funDerivada), precisao, true);
+                contRaiz++;
+                x -= 0.005;
+            } else {
+                if (precisao == null)
+                    precisao = 0;
+                addLinhaRaphson(++numLinhas, x, fun, funDerivada, x - (fun / funDerivada), precisao, false);
+            }
+
+            precisaoAnterior = x;
+
+            x = x - (fun / funDerivada);
+
+            precisao = x - precisaoAnterior;
+        }
+
+
+        raizNaoEncontrada = true;
+        i = x;
+
+        // }
+    */
 
     $('#raiz').html('<div class="alert alert-success alert-dismissible fade show" role="alert" id="alerta"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span></button><strong id="qtdRaiz">10</strong> Raíz(es) encontrada(s)! </div>');
     $('#qtdRaiz').html(contRaiz);
@@ -197,7 +240,7 @@ function addLinhaRaphson(nl, x, funcao, funDerivada, calc, precisao, sucesso) {
 
     $('#tabela-raiz tbody').append(novaLinha);
     if (sucesso) {
-        $('#tabela-raizes tbody').append('<tr> <td scope="row">' + nl + '</td> <td>' + precisao + '</td> </tr>');
+        $('#tabela-raizes tbody').append('<tr> <td scope="row">' + nl + '</td> <td>' + x + '</td> </tr>');
     }
 
 }
